@@ -1,1 +1,3 @@
-a simple alarm clock app
+**noki**
+
+a simple alarm clock app for android.
