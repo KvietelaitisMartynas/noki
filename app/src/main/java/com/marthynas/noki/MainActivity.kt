@@ -60,17 +60,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NokiTheme {
-                val navController = rememberNavController()
-
                 val state = viewModel.state.collectAsState()
-                NavHost(navController, startDestination = "home") {
-                    composable("home") {
-                        HomeScreen(state = state.value, onEvent = viewModel::onEvent, navController = navController)
-                    }
-                    composable("details") {
-                        DetailsScreen(navController)
-                    }
-                }
+                HomeScreen(state = state.value, onEvent = viewModel::onEvent)
 
 /*                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     GreetingScreen(

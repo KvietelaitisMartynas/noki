@@ -4,11 +4,14 @@ import com.marthynas.noki.alarm.AlarmEvent
 import com.marthynas.noki.alarm.AlarmState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -33,10 +36,12 @@ import com.marthynas.noki.CustomTopBar
 import com.marthynas.noki.R
 import com.marthynas.noki.ui.theme.NokiTheme
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.unit.sp
+import com.marthynas.noki.dialogs.AddAlarmDialog
 
 
 @Composable
-fun HomeScreen(state: AlarmState, onEvent: (AlarmEvent) -> Unit, modifier: Modifier = Modifier, navController: NavController) {
+fun HomeScreen(state: AlarmState, onEvent: (AlarmEvent) -> Unit, modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             CustomTopBar(title = "noki")
@@ -48,15 +53,31 @@ fun HomeScreen(state: AlarmState, onEvent: (AlarmEvent) -> Unit, modifier: Modif
             }) {
                 Icon(Icons.Default.Add, contentDescription = "add alarm")
             }*/
-            CustomButton(text = "add alarm", onClick = {navController.navigate("details")})
+            CustomButton(text = "+", onClick = {onEvent(AlarmEvent.ShowDialog)})
         }
     ) { padding ->
+        if (state.isAddingAlarm) {
+            AddAlarmDialog(state = state, onEvent = onEvent)
+        }
         LazyColumn(
             contentPadding = padding,
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
+            items(state.alarms) { alarm ->
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column {
+                        Text(
+                            text = "${alarm.hour}:${alarm.minute}", fontSize = 40.sp
+                        )
+                        Text(
+                            text = alarm.label, fontSize = 20.sp
+                        )
+                    }
+                }
+            }
         }
     }
 }
