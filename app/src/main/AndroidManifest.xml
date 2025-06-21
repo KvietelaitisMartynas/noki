@@ -22,9 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Noki"
         tools:targetApi="31">
-        <activity
-            android:name=".AlarmActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -52,7 +50,6 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-
                 <!-- This filter ensures it only runs on boot -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
