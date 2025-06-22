@@ -56,9 +56,6 @@ fun HomeScreen(state: AlarmState, onEvent: (AlarmEvent) -> Unit, modifier: Modif
             CustomButton(text = "+", onClick = {onEvent(AlarmEvent.ShowDialog)})
         }
     ) { padding ->
-        if (state.isAddingAlarm) {
-            AddAlarmDialog(state = state, onEvent = onEvent)
-        }
         LazyColumn(
             contentPadding = padding,
             modifier = modifier.fillMaxSize(),
@@ -78,6 +75,10 @@ fun HomeScreen(state: AlarmState, onEvent: (AlarmEvent) -> Unit, modifier: Modif
                     }
                 }
             }
+        }
+
+        if (state.isAddingAlarm) {
+            AddAlarmDialog(state = state, onEvent = onEvent)
         }
     }
 }

@@ -49,6 +49,9 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 
+    val composeBom = platform("androidx.compose:compose-bom:2025.05.00") // Or newer
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
