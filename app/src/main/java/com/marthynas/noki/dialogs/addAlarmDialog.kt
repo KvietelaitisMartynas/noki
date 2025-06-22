@@ -31,8 +31,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.marthynas.noki.CustomTextBox
+import com.marthynas.noki.CustomTimeBox
 import com.marthynas.noki.ui.theme.NokiTheme
 
+//A composable object for the use as a dialog box for the alarm
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAlarmDialog(
@@ -40,21 +42,16 @@ fun AddAlarmDialog(
     onEvent: (AlarmEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // This is crucial for making your custom dialog feel native.
-    // It intercepts the system back button/gesture and calls your dismiss event.
     BackHandler(onBack = { onEvent(AlarmEvent.HideDialog) })
 
-    // The full-screen Box that acts as your transparent "scrim".
     Box(
         modifier = Modifier
             .fillMaxSize()
-            // This detects clicks on the transparent area *outside* your dialog.
             .pointerInput(Unit) {
                 detectTapGestures { onEvent(AlarmEvent.HideDialog) }
             },
         contentAlignment = Alignment.Center
     ) {
-        // Your dialog's content area.
         Surface(
             shape = RectangleShape,
             border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
@@ -64,114 +61,22 @@ fun AddAlarmDialog(
             modifier = modifier // Use the modifier passed into the function
                 .padding(16.dp)
                 .fillMaxWidth()
-                // This modifier is the key fix:
-                // 1. It makes the Surface clickable.
-                // 2. Its empty action `{}` means nothing happens when you click it.
-                // 3. It STOPS the click from propagating to the parent Box,
-                //    so clicking the dialog doesn't dismiss it.
-                // 4. It does NOT block clicks from reaching child composables
-                //    like your TextField.
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = null // No visual ripple effect on the container.
+                    indication = null
                 ) { /* Consume the click */ }
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             ) {
                 Text(text = "new alarm")
                 Spacer(modifier = Modifier.padding(12.dp))
                 CustomTextBox(state.label, { onEvent(AlarmEvent.SetLabel(it)) }, "label")
+
+                Spacer(modifier = Modifier.padding(12.dp))
+                CustomTimeBox(state.label, { onEvent(AlarmEvent.SetHour(it.toInt())) }, "hour")
+
             }
         }
     }
 }
-
-
-/*{
-/*
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures { onEvent(AlarmEvent.HideDialog) }
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        NokiTheme {
-            Surface(
-                shape = RectangleShape,
-                border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
-                color = MaterialTheme.colorScheme.background,
-                tonalElevation = 0.dp,
-                shadowElevation = 0.dp,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null // No ripple effect on the dialog container
-                    ) {
-                        */
-/* Do nothing. This just consumes the click. *//*
-
-                    }
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(text = "new alarm")
-                    Spacer(modifier = Modifier.padding(12.dp))
-                    CustomTextBox(state.label, { onEvent(AlarmEvent.SetLabel(it)) }, "label")
-                }
-            }
-        }
-    }
-*/
-
-    BasicAlertDialog(
-        onDismissRequest = {
-            onEvent(AlarmEvent.HideDialog)
-        },
-        modifier = modifier,
-        properties = DialogProperties(
-            dismissOnClickOutside = true,
-            usePlatformDefaultWidth = true,
-
-        ),
-        content = {
-            NokiTheme {
-                Surface(
-                    shape = RectangleShape, // Sharp corners
-                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary), // Clear black border
-                    color = MaterialTheme.colorScheme.background, // Pure white background
-                    tonalElevation = 0.dp,
-                    shadowElevation = 0.dp,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ){
-                        Text(text = "new alarm")
-
-                        Spacer(modifier = Modifier.padding(12.dp))
-
-                        CustomTextBox(state.label, {onEvent(AlarmEvent.SetLabel(it))}, "label")
-                        /*TextField(
-                            value = state.label,
-                            onValueChange = {
-                                onEvent(AlarmEvent.SetLabel(it))
-                            },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )*/
-                    }
-                }
-            }
-        }
-    )
-}*/
