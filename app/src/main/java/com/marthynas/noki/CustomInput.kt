@@ -20,6 +20,8 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
+import android.util.Log
+
 @Composable
 fun CustomTextBox(
     value: String,
@@ -33,7 +35,8 @@ fun CustomTextBox(
             modifier = Modifier
                 .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(0.dp))
                 .padding(horizontal = 8.dp, vertical = 8.dp) // set padding yourself
-        ) {
+        )
+	{
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
@@ -89,7 +92,7 @@ fun CustomTimeBox(
     modifier: Modifier = Modifier
 ){
     Column(modifier = modifier) {
-        Text(
+	    Text(
             text = label,
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = MaterialTheme.typography.bodySmall.fontSize
